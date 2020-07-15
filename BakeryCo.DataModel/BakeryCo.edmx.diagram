@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="eae3b14cfa5d46ac8b1afeec4b23bca4" Name="Diagram1" ZoomLevel="72">
+        <EntityTypeShape EntityType="BakeryCoModel.Registration" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BakeryCoModel.MainCategory" Width="1.5" PointX="3.75" PointY="5.375" />
+        <EntityTypeShape EntityType="BakeryCoModel.OrderTracking" Width="1.5" PointX="9.75" PointY="11.25" />
+        <EntityTypeShape EntityType="BakeryCoModel.PaymentMode" Width="1.5" PointX="0.75" PointY="9.25" />
+        <EntityTypeShape EntityType="BakeryCoModel.Promotion" Width="1.5" PointX="11.75" PointY="11.25" />
+        <EntityTypeShape EntityType="BakeryCoModel.OrderAssignDetail" Width="1.5" PointX="13.625" PointY="7.25" />
+        <EntityTypeShape EntityType="BakeryCoModel.PushNotificationCustomer" Width="1.5" PointX="3" PointY="19.25" />
+        <AssociationConnector Association="BakeryCoModel.FK_PushNotificationCustomer_Registration" />
+        <EntityTypeShape EntityType="BakeryCoModel.DriverLocation" Width="1.5" PointX="13.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BakeryCoModel.SMSDetail" Width="1.5" PointX="3" PointY="23.625" />
+        <AssociationConnector Association="BakeryCoModel.FK_SMSDetails_Registration" />
+        <EntityTypeShape EntityType="BakeryCoModel.CorporateClient" Width="1.5" PointX="5.375" PointY="14.75" />
+        <EntityTypeShape EntityType="BakeryCoModel.Rating" Width="1.5" PointX="7.375" PointY="14.75" />
+        <EntityTypeShape EntityType="BakeryCoModel.UserRating" Width="1.5" PointX="13.375" PointY="3.75" />
+        <EntityTypeShape EntityType="BakeryCoModel.UserPromoDetail" Width="1.5" PointX="14.375" PointY="11.75" />
+        <EntityTypeShape EntityType="BakeryCoModel.OrderSubItem" Width="1.5" PointX="10.5" PointY="18.125" />
+        <EntityTypeShape EntityType="BakeryCoModel.Section" Width="1.5" PointX="14.375" PointY="15.75" />
+        <EntityTypeShape EntityType="BakeryCoModel.SubItemDetail" Width="1.5" PointX="10.5" PointY="23.125" />
+        <EntityTypeShape EntityType="BakeryCoModel.StoreWorkData" Width="1.5" PointX="3" PointY="12.125" />
+        <EntityTypeShape EntityType="BakeryCoModel.OrderItem" Width="1.5" PointX="7.625" PointY="24.75" />
+        <AssociationConnector Association="BakeryCoModel.FK_OrderSubItem_OrderItem" />
+        <EntityTypeShape EntityType="BakeryCoModel.ItemPriceDetail" Width="1.5" PointX="10.5" PointY="6.375" />
+        <EntityTypeShape EntityType="BakeryCoModel.userPromotion" Width="1.5" PointX="11.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BakeryCoModel.VATDetail" Width="1.5" PointX="5.375" PointY="10.75" />
+        <EntityTypeShape EntityType="BakeryCoModel.StoreInformation" Width="1.5" PointX="0.75" PointY="11.625" />
+        <AssociationConnector Association="BakeryCoModel.FK_OrderAssignDetails_StoreInformation" />
+        <AssociationConnector Association="BakeryCoModel.FK_StoreWorkData_StoreInformation" />
+        <EntityTypeShape EntityType="BakeryCoModel.ItemSize" Width="1.5" PointX="16.375" PointY="5" />
+        <AssociationConnector Association="BakeryCoModel.FK_ItemPriceDetails_ItemSize" />
+        <EntityTypeShape EntityType="BakeryCoModel.Banner" Width="1.5" PointX="15.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BakeryCoModel.SubCategory" Width="1.5" PointX="6" PointY="28.75" />
+        <AssociationConnector Association="BakeryCoModel.FK_SubCategory_MainCategory" />
+        <EntityTypeShape EntityType="BakeryCoModel.ItemsDetail" Width="1.5" PointX="8.25" PointY="29" />
+        <AssociationConnector Association="BakeryCoModel.FK_ItemPriceDetails_ItemsDetails" />
+        <AssociationConnector Association="BakeryCoModel.FK_ItemsDetails_SubCategory" />
+        <AssociationConnector Association="BakeryCoModel.FK_OrderSubItem_ItemsDetails" />
+        <AssociationConnector Association="BakeryCoModel.FK_SubItemDetails_ItemsDetails" />
+        <AssociationConnector Association="BakeryCoModel.FK_SubItemDetails_ItemsDetails1" />
+        <EntityTypeShape EntityType="BakeryCoModel.OrderRating" Width="1.5" PointX="8.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BakeryCoModel.UserAddressDetail" Width="1.5" PointX="16.375" PointY="9" />
+        <EntityTypeShape EntityType="BakeryCoModel.OrderInfo" Width="1.5" PointX="18.625" PointY="2.375" />
+        <AssociationConnector Association="BakeryCoModel.FK_OrderAssignDetails_OrderInfo" />
+        <AssociationConnector Association="BakeryCoModel.FK_OrderInfo_Registration" />
+        <AssociationConnector Association="BakeryCoModel.FK_OrderInfo_UserAddress" />
+        <AssociationConnector Association="BakeryCoModel.FK_OrderItem_OrderInfo" />
+        <AssociationConnector Association="BakeryCoModel.FK_OrderSubItem_OrderInfo" />
+        <EntityTypeShape EntityType="BakeryCoModel.UserDeviceToken" Width="1.5" PointX="3.375" PointY="0.75" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

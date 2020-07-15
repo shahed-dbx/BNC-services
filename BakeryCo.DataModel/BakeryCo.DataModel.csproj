@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3BB0FA47-7B9B-4DE3-A4C8-53E8AB624F25}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BakeryCo.DataModel</RootNamespace>
+    <AssemblyName>BakeryCo.DataModel</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BakeryCo.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BakeryCo.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BakeryCo.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BakeryCo.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BakeryCo.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Banner.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CorporateClient.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DriverLocation.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GenerateNewOrderPN_Result.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ItemPriceDetail.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ItemsDetail.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ItemSize.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MainCategory.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderAssignDetail.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderInfo.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderItem.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderRating.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderSubItem.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderTracking.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentMode.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="procSelectSpecifiedDayStoreTime_Result.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="procSelectStoreInfo_Result.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Promotion.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PushNotificationCustomer.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Rating.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Registration.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Section.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SMSDetail.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_Get_AssignOrderDetails_Result.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_Get_DriverDetails_Result.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_Get_ItemDetailsNew_Result.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_Get_OrderDeliveryHistory_Result.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_Get_OrderTracking_New_Result.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_Get_OrderTracking_Result.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_Get_Promotions_Result.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_Get_PushNotificationMessages_Result.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StoreInformation.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StoreWorkData.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SubCategory.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SubItemDetail.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserAddressDetail.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserDeviceToken.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserPromoDetail.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="userPromotion.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserRating.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VATDetail.cs">
+      <DependentUpon>BakeryCo.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="BakeryCo.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>BakeryCo.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="BakeryCo.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>BakeryCo.edmx</DependentUpon>
+      <LastGenOutput>BakeryCo.Context.cs</LastGenOutput>
+    </None>
+    <None Include="BakeryCo.edmx.diagram">
+      <DependentUpon>BakeryCo.edmx</DependentUpon>
+    </None>
+    <None Include="BakeryCo.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>BakeryCo.edmx</DependentUpon>
+      <LastGenOutput>BakeryCo.cs</LastGenOutput>
+    </None>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
