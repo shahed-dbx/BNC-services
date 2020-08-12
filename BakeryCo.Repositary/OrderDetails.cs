@@ -7,11 +7,15 @@ using BakeryCo.DataModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Transactions;
+using System.Web;
+using System.IO;
+using System.Configuration;
 
 namespace BakeryCo.Repositary
 {
 	public class OrderDetails
 	{
+
 		//BakeryCoEntities
 		BakeryCo.DataModel.BakeryCoEntities db = new BakeryCo.DataModel.BakeryCoEntities();
 		public JObject InsertOrderDetails_New(JObject Json)
@@ -1142,7 +1146,7 @@ namespace BakeryCo.Repositary
 					   on oInfo.StoreId equals o.StoreId
 					   join OrdRat in db.OrderRatings on oInfo.OrderId equals OrdRat.OrderId into orderrat
 					   from ordrating in orderrat.DefaultIfEmpty()
-					   where oInfo.UserId == UserId && oInfo.status == true//&& oInfo.IsFavorite == true
+					   where oInfo.UserId == UserId && oInfo.status == true && oInfo.OrderStatus != "Wait"//&& oInfo.IsFavorite == true
 					   group new { oItems, oInfo, subCat, usrAddress, o, ordrating }
 						   by new
 						   {
@@ -1181,7 +1185,7 @@ namespace BakeryCo.Repositary
 						   ItmName = odrItems.Key.Qty + " " + odrItems.Key.ItemName,// odrItems.Count() + " " + odrItems.Key.ItemName,
 						   ItmName_ar = odrItems.Key.Qty + " " + odrItems.Key.ItemName_Ar,//odrItems.Count() + " " + odrItems.Key.ItemName_Ar,
 						   UserAddress = (odrItems.Key.Address == null ? string.Empty : odrItems.Key.Address),
-						   TotPrice = odrItems.Key.NetTotal ==null ? odrItems.Key.Total_Price: odrItems.Key.NetTotal,
+						   TotPrice = odrItems.Key.NetTotal == null ? odrItems.Key.Total_Price : odrItems.Key.NetTotal,
 						   Odate = odrItems.Key.OrderDate,
 						   ordratig = (odrItems.Key.OrderRating1 == null ? 0 : odrItems.Key.OrderRating1),
 						   ordraCmt = (odrItems.Key.OrderComment == null ? string.Empty : odrItems.Key.OrderComment),
@@ -1255,7 +1259,7 @@ namespace BakeryCo.Repositary
 					   on oInfo.StoreId equals o.StoreId
 					   join OrdRat in db.OrderRatings on oInfo.OrderId equals OrdRat.OrderId into orderrat
 					   from ordrating in orderrat.DefaultIfEmpty()
-					   where oInfo.UserId == UserId && oInfo.status == true//&& oInfo.IsFavorite == true
+					   where oInfo.UserId == UserId && oInfo.status == true && oInfo.OrderStatus != "Wait"//&& oInfo.IsFavorite == true
 					   group new { oItems, oInfo, subCat, usrAddress, o, ordrating }
 						   by new
 						   {
@@ -2279,7 +2283,7 @@ namespace BakeryCo.Repositary
 		public bool SaveUserDevicetoken(string deviceToken, string source, int sourceId)
 		{
 			List<UserDeviceToken> lstUserToken = db.UserDeviceTokens.Where(i => i.DeviceToken == deviceToken).ToList();
-			if(lstUserToken.Count==0)
+			if (lstUserToken.Count == 0)
 			{
 				try
 				{
@@ -2298,6 +2302,127 @@ namespace BakeryCo.Repositary
 				}
 
 			}
+			return true;
+		}
+
+		public JObject SaveSpecialImages(JObject JsonData)
+		{
+			JObject Jobj = new JObject(new JProperty("Failure", "PleaseTry"));
+
+			try
+			{
+				JObject jobj = JsonData;// JObject.Parse(Json);
+				string RefName = "";
+				string RefImg64 = "";
+				string ImgOnCakeNm = "";
+				string ImgOnCake64 = "";
+				string RefReName = "";
+				string ImgOnReName = "";
+				bool status = false;
+				string MessageEn = "";
+				string MessageAr = "";
+				string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
+
+
+				IEnumerable<JToken> ReferanceImage = jobj.SelectToken("ReferanceImage");
+				IEnumerable<JToken> ImageOnCake = jobj.SelectToken("ImageOnCake");
+
+				JObject RefImg = (JObject)JToken.FromObject(ReferanceImage);
+				JObject ImgCake = (JObject)JToken.FromObject(ImageOnCake);
+
+				//Referance image details
+				RefName = Convert.ToString(RefImg.SelectToken("RefImgName"));
+				RefImg64 = Convert.ToString(RefImg.SelectToken("RefBase64"));
+
+				if (RefName != null && RefImg64 != "")
+				{
+					bool IsSuccess = SaveImage(RefName, RefImg64);
+					if (IsSuccess)
+					{
+						RefReName = BaseURL + RefName;  // local system URL.
+														//RefReName = " http://csadms.com/bncservices" + RefName;  // CSADMS.COM URL.
+														//RefReName = "http://localhost:6608/Uploads/CakeImages" + RefName;  // LIVE URL.
+						status = true;
+					}
+					else
+					{
+						RefReName = "";
+					}
+				}
+				else
+				{
+					RefReName = "";
+				}
+
+				//Cake On Image Details
+				ImgOnCakeNm = Convert.ToString(ImgCake.SelectToken("ImageOnName"));
+				ImgOnCake64 = Convert.ToString(ImgCake.SelectToken("ImageOnBase64"));
+
+				if (ImgOnCakeNm != null && ImgOnCake64 != "")
+				{
+					bool IsSuccess = SaveImage(ImgOnCakeNm, ImgOnCake64);
+					if (IsSuccess)
+					{
+						ImgOnReName = BaseURL + ImgOnCakeNm;  // local system URL.
+															  //ImgOnReName = " http://csadms.com/bncservices" + RefName;  // CSADMS.COM URL.
+															  //ImgOnReName = "http://localhost:6608/Uploads/CakeImages" + RefName;  // LIVE URL.
+						status = true;
+					}
+					else
+					{
+						ImgOnReName = "";
+					}
+				}
+				else
+				{
+					ImgOnReName = "";
+				}
+
+
+				if (status)
+				{
+					MessageEn = "image save successfull.";
+					MessageAr = "image save successfull Ar.";
+				}
+				else
+				{
+					MessageEn = "Failed to save image";
+					MessageAr = "failed to save image Ar";
+				}
+				JObject res1 = new JObject(new JProperty("Referance", RefReName),
+											new JProperty("ImageOnCake", ImgOnReName));
+
+				JObject res = new JObject(new JProperty("Status", status),
+										 (new JProperty("Message", MessageEn)),
+										 (new JProperty("MessageAr", MessageAr)),
+										 (new JProperty("Data", res1)));
+				return res;
+			}
+			catch (Exception ex)
+			{
+				return Jobj = new JObject(new JProperty("Status", false),
+											 (new JProperty("Message", "failed, Please try again.!")),
+											 (new JProperty("MessageAr", "Failed, please try again Ar.! ")),
+											 (new JProperty("Data", "[]")));
+			}
+		}
+
+		public bool SaveImage(string ImgName, string ImgStr)
+		{
+			String path = HttpContext.Current.Server.MapPath("~/Uploads/CakeImages"); //Path
+																					  //Check if directory exist
+			if (!System.IO.Directory.Exists(path))
+			{
+				System.IO.Directory.CreateDirectory(path); //Create directory if it doesn't exist
+			}
+			//string imageName = ImgName + ".jpg";
+			string imageName = ImgName;
+
+			//set the image path
+			string imgPath = Path.Combine(path, imageName);
+			byte[] imageBytes = Convert.FromBase64String(ImgStr);
+			File.WriteAllBytes(imgPath, imageBytes);
+
 			return true;
 		}
 	}

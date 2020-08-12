@@ -335,5 +335,19 @@ namespace BakeryCo.Controllers
 			}
 		}
 
+		[HttpPost]
+		public HttpResponseMessage SaveSpecialImages(JObject Json)
+		{
+			try
+			{
+				var response = Request.CreateResponse(HttpStatusCode.Created, obj.SaveSpecialImages(Json));
+				return response;
+			}
+			catch (Exception ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+			}
+		}
+
 	}
 }
