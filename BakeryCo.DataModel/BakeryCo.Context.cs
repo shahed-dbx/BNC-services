@@ -44,7 +44,6 @@ namespace BakeryCo.DataModel
         public virtual DbSet<Section> Sections { get; set; }
         public virtual DbSet<SubItemDetail> SubItemDetails { get; set; }
         public virtual DbSet<StoreWorkData> StoreWorkDatas { get; set; }
-        public virtual DbSet<OrderItem> OrderItems { get; set; }
         public virtual DbSet<ItemPriceDetail> ItemPriceDetails { get; set; }
         public virtual DbSet<userPromotion> userPromotions { get; set; }
         public virtual DbSet<VATDetail> VATDetails { get; set; }
@@ -57,6 +56,9 @@ namespace BakeryCo.DataModel
         public virtual DbSet<UserAddressDetail> UserAddressDetails { get; set; }
         public virtual DbSet<OrderInfo> OrderInfoes { get; set; }
         public virtual DbSet<UserDeviceToken> UserDeviceTokens { get; set; }
+        public virtual DbSet<OrderItem> OrderItems { get; set; }
+        public virtual DbSet<OrderItemCake> OrderItemCakes { get; set; }
+        public virtual DbSet<OrderItemCakeLayer> OrderItemCakeLayers { get; set; }
     
         public virtual ObjectResult<string> SP_CancelOrder(Nullable<int> orderId, Nullable<int> userId)
         {

@@ -44,6 +44,9 @@ namespace BakeryCo.DataModel
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> ModifiedOn { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
+        public string LayersShape { get; set; }
+        public Nullable<bool> ReferanceImageOfCake { get; set; }
+        public Nullable<bool> AllowImagesOnCake { get; set; }
     
         public virtual ICollection<ItemPriceDetail> ItemPriceDetails { get; set; }
         public virtual SubCategory SubCategory { get; set; }

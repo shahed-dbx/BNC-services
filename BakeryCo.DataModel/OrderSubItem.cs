@@ -22,7 +22,7 @@ namespace BakeryCo.DataModel
         public string ItemPrice { get; set; }
         public Nullable<int> Size { get; set; }
     
-        public virtual OrderItem OrderItem { get; set; }
         public virtual ItemsDetail ItemsDetail { get; set; }
+        public virtual OrderItem OrderItem { get; set; }
     }
 }

@@ -40,15 +40,9 @@ namespace BakeryCo.Controllers
 		{
 			try
 			{
-
 				var response = Request.CreateResponse(
 							HttpStatusCode.Created, obj.InsertOrderDetails_New(Json));
-
-
-
 				return response;
-
-
 			}
 			catch (Exception ex)
 			{

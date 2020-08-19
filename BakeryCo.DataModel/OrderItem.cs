@@ -27,9 +27,11 @@ namespace BakeryCo.DataModel
         public string ItemPrice { get; set; }
         public Nullable<int> Size { get; set; }
         public Nullable<int> ItemType { get; set; }
+        public Nullable<int> PriceId { get; set; }
+        public Nullable<bool> SpecialCake { get; set; }
     
-        public virtual ICollection<OrderSubItem> OrderSubItems { get; set; }
         public virtual OrderInfo OrderInfo { get; set; }
         public virtual OrderInfo OrderInfo1 { get; set; }
+        public virtual ICollection<OrderSubItem> OrderSubItems { get; set; }
     }
 }

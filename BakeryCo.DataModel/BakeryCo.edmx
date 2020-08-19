@@ -67,6 +67,8 @@
           <Property Name="ItemSizeDescription" Type="nvarchar" MaxLength="300" />
           <Property Name="ItemSizeDescription_Ar" Type="nvarchar" MaxLength="350" />
           <Property Name="CustomCakeJson" Type="nvarchar(max)" />
+          <Property Name="Layer" Type="int" />
+          <Property Name="LayerImage" Type="nvarchar(max)" />
           <Property Name="Status" Type="bit" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedDate" Type="datetime" />
@@ -96,6 +98,9 @@
           <Property Name="AvgPreparationTime" Type="int" />
           <Property Name="ItemSeq" Type="int" />
           <Property Name="IsDeliver" Type="bit" />
+          <Property Name="LayersShape" Type="nvarchar(max)" />
+          <Property Name="ReferanceImageOfCake" Type="bit" />
+          <Property Name="AllowImagesOnCake" Type="bit" />
           <Property Name="Status" Type="bit" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
@@ -125,6 +130,7 @@
           <Property Name="CategoryName_Ar" Type="nvarchar" MaxLength="50" />
           <Property Name="Description_Ar" Type="nvarchar" MaxLength="300" />
           <Property Name="Images" Type="nvarchar" MaxLength="300" />
+          <Property Name="SequenceId" Type="int" />
           <Property Name="CreationDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="ModifiicationDate" Type="datetime" />
@@ -203,6 +209,44 @@
           <Property Name="ItemPrice" Type="nvarchar" MaxLength="50" />
           <Property Name="Size" Type="int" />
           <Property Name="ItemType" Type="int" />
+          <Property Name="PriceId" Type="int" />
+          <Property Name="SpecialCake" Type="bit" />
+        </EntityType>
+        <EntityType Name="OrderItemCake">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderItemId" Type="int" />
+          <Property Name="OrderId" Type="bigint" />
+          <Property Name="MessageOnCake" Type="nvarchar" MaxLength="200" />
+          <Property Name="RefImage" Type="nvarchar" MaxLength="500" />
+          <Property Name="ImsgrOnCake" Type="nvarchar" MaxLength="500" />
+          <Property Name="Shape" Type="nvarchar" MaxLength="30" />
+          <Property Name="Layers" Type="int" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="OrderItemCakeLayers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderItemCakeId" Type="int" />
+          <Property Name="OrderItemId" Type="int" />
+          <Property Name="OrderId" Type="int" />
+          <Property Name="LayerNo" Type="int" />
+          <Property Name="FlavorId" Type="int" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
         </EntityType>
         <EntityType Name="OrderRating">
           <Key>
@@ -516,7 +560,7 @@
           <Property Name="AddressType" Type="nvarchar" MaxLength="50" />
           <Property Name="Latitude" Type="float" />
           <Property Name="Longitude" Type="float" />
-          <Property Name="ContactPerson" Type="nvarchar" MaxLength="300" />
+          <Property Name="ContactPerson" Type="nvarchar" MaxLength="100" />
           <Property Name="ContactNo" Type="nvarchar" MaxLength="30" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="CreatedDate" Type="datetime" />
@@ -842,6 +886,8 @@
           <EntitySet Name="OrderAssignDetails" EntityType="Self.OrderAssignDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderInfo" EntityType="Self.OrderInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderItem" EntityType="Self.OrderItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderItemCake" EntityType="Self.OrderItemCake" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderItemCakeLayers" EntityType="Self.OrderItemCakeLayers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderRating" EntityType="Self.OrderRating" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderSubItem" EntityType="Self.OrderSubItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderTracking" EntityType="Self.OrderTracking" Schema="dbo" store:Type="Tables" />
@@ -1013,11 +1059,6 @@
           <EntitySet Name="Sections" EntityType="BakeryCoModel.Section" />
           <EntitySet Name="SubItemDetails" EntityType="BakeryCoModel.SubItemDetail" />
           <EntitySet Name="StoreWorkDatas" EntityType="BakeryCoModel.StoreWorkData" />
-          <EntitySet Name="OrderItems" EntityType="BakeryCoModel.OrderItem" />
-          <AssociationSet Name="FK_OrderSubItem_OrderItem" Association="BakeryCoModel.FK_OrderSubItem_OrderItem">
-            <End Role="OrderItem" EntitySet="OrderItems" />
-            <End Role="OrderSubItem" EntitySet="OrderSubItems" />
-          </AssociationSet>
           <EntitySet Name="ItemPriceDetails" EntityType="BakeryCoModel.ItemPriceDetail" />
           <EntitySet Name="userPromotions" EntityType="BakeryCoModel.userPromotion" />
           <EntitySet Name="VATDetails" EntityType="BakeryCoModel.VATDetail" />
@@ -1103,14 +1144,6 @@
             <End Role="UserAddressDetail" EntitySet="UserAddressDetails" />
             <End Role="OrderInfo" EntitySet="OrderInfoes" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderItem_OrderInfo" Association="BakeryCoModel.FK_OrderItem_OrderInfo">
-            <End Role="OrderInfo" EntitySet="OrderInfoes" />
-            <End Role="OrderItem" EntitySet="OrderItems" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrderSubItem_OrderInfo" Association="BakeryCoModel.FK_OrderSubItem_OrderInfo">
-            <End Role="OrderInfo" EntitySet="OrderInfoes" />
-            <End Role="OrderItem" EntitySet="OrderItems" />
-          </AssociationSet>
           <FunctionImport Name="procSelectSpecifiedDayStoreTime" ReturnType="Collection(BakeryCoModel.procSelectSpecifiedDayStoreTime_Result)">
             <Parameter Name="dayOfWeek" Mode="In" Type="String" />
             <Parameter Name="UserVersion" Mode="In" Type="String" />
@@ -1128,6 +1161,21 @@
           <Parameter Name="DriverId" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="UserDeviceTokens" EntityType="BakeryCoModel.UserDeviceToken" />
+          <EntitySet Name="OrderItems" EntityType="BakeryCoModel.OrderItem" />
+          <EntitySet Name="OrderItemCakes" EntityType="BakeryCoModel.OrderItemCake" />
+          <EntitySet Name="OrderItemCakeLayers" EntityType="BakeryCoModel.OrderItemCakeLayer" />
+          <AssociationSet Name="FK_OrderItem_OrderInfo" Association="BakeryCoModel.FK_OrderItem_OrderInfo">
+            <End Role="OrderInfo" EntitySet="OrderInfoes" />
+            <End Role="OrderItem" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderSubItem_OrderInfo" Association="BakeryCoModel.FK_OrderSubItem_OrderInfo">
+            <End Role="OrderInfo" EntitySet="OrderInfoes" />
+            <End Role="OrderItem" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderSubItem_OrderItem" Association="BakeryCoModel.FK_OrderSubItem_OrderItem">
+            <End Role="OrderItem" EntitySet="OrderItems" />
+            <End Role="OrderSubItem" EntitySet="OrderSubItems" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="MainCategory">
           <Key>
@@ -1145,6 +1193,7 @@
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="Status" Type="Boolean" />
           <NavigationProperty Name="SubCategories" Relationship="BakeryCoModel.FK_SubCategory_MainCategory" FromRole="MainCategory" ToRole="SubCategory" />
+          <Property Name="SequenceId" Type="Int32" />
         </EntityType>
         <EntityType Name="OrderTracking">
           <Key>
@@ -1474,8 +1523,8 @@
           <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ItemPrice" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Size" Type="Int32" />
-          <NavigationProperty Name="OrderItem" Relationship="BakeryCoModel.FK_OrderSubItem_OrderItem" FromRole="OrderSubItem" ToRole="OrderItem" />
           <NavigationProperty Name="ItemsDetail" Relationship="BakeryCoModel.FK_OrderSubItem_ItemsDetails" FromRole="OrderSubItem" ToRole="ItemsDetail" />
+          <NavigationProperty Name="OrderItem" Relationship="BakeryCoModel.FK_OrderSubItem_OrderItem" FromRole="OrderSubItem" ToRole="OrderItem" />
         </EntityType>
         <EntityType Name="Section">
           <Key>
@@ -1538,34 +1587,6 @@
           <Property Name="phone" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="StoreInformation" Relationship="BakeryCoModel.FK_StoreWorkData_StoreInformation" FromRole="StoreWorkData" ToRole="StoreInformation" />
         </EntityType>
-        <EntityType Name="OrderItem">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderId" Type="Int32" Nullable="false" />
-          <Property Name="ItemId" Type="Int32" Nullable="false" />
-          <Property Name="Qty" Type="Int32" Nullable="false" />
-          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ItemPrice" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Size" Type="Int32" />
-          <Property Name="ItemType" Type="Int32" />
-          <NavigationProperty Name="OrderSubItems" Relationship="BakeryCoModel.FK_OrderSubItem_OrderItem" FromRole="OrderItem" ToRole="OrderSubItem" />
-          <NavigationProperty Name="OrderInfo" Relationship="BakeryCoModel.FK_OrderItem_OrderInfo" FromRole="OrderItem" ToRole="OrderInfo" />
-          <NavigationProperty Name="OrderInfo1" Relationship="BakeryCoModel.FK_OrderSubItem_OrderInfo" FromRole="OrderItem" ToRole="OrderInfo" />
-        </EntityType>
-        <Association Name="FK_OrderSubItem_OrderItem">
-          <End Type="BakeryCoModel.OrderItem" Role="OrderItem" Multiplicity="1" />
-          <End Type="BakeryCoModel.OrderSubItem" Role="OrderSubItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OrderItem">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="OrderSubItem">
-              <PropertyRef Name="OrderItemId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="ItemPriceDetail">
           <Key>
             <PropertyRef Name="PriceId" />
@@ -1586,6 +1607,8 @@
           <Property Name="Calories" Type="Decimal" Precision="18" Scale="2" />
           <NavigationProperty Name="ItemsDetail" Relationship="BakeryCoModel.FK_ItemPriceDetails_ItemsDetails" FromRole="ItemPriceDetail" ToRole="ItemsDetail" />
           <Property Name="CaloriesUOM" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Layer" Type="Int32" />
+          <Property Name="LayerImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="userPromotion">
           <Key>
@@ -1845,6 +1868,9 @@
           <NavigationProperty Name="OrderSubItems" Relationship="BakeryCoModel.FK_OrderSubItem_ItemsDetails" FromRole="ItemsDetail" ToRole="OrderSubItem" />
           <NavigationProperty Name="SubItemDetails" Relationship="BakeryCoModel.FK_SubItemDetails_ItemsDetails" FromRole="ItemsDetail" ToRole="SubItemDetail" />
           <NavigationProperty Name="SubItemDetails1" Relationship="BakeryCoModel.FK_SubItemDetails_ItemsDetails1" FromRole="ItemsDetail" ToRole="SubItemDetail" />
+          <Property Name="LayersShape" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ReferanceImageOfCake" Type="Boolean" />
+          <Property Name="AllowImagesOnCake" Type="Boolean" />
         </EntityType>
         <Association Name="FK_ItemPriceDetails_ItemsDetails">
           <End Type="BakeryCoModel.ItemsDetail" Role="ItemsDetail" Multiplicity="1" />
@@ -1947,7 +1973,7 @@
           <Property Name="AddressType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Latitude" Type="Double" />
           <Property Name="Longitude" Type="Double" />
-          <Property Name="ContactPerson" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPerson" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ContactNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
@@ -1998,7 +2024,7 @@
           <NavigationProperty Name="UserAddressDetail" Relationship="BakeryCoModel.FK_OrderInfo_UserAddress" FromRole="OrderInfo" ToRole="UserAddressDetail" />
           <NavigationProperty Name="OrderItems" Relationship="BakeryCoModel.FK_OrderItem_OrderInfo" FromRole="OrderInfo" ToRole="OrderItem" />
           <NavigationProperty Name="OrderItems1" Relationship="BakeryCoModel.FK_OrderSubItem_OrderInfo" FromRole="OrderInfo" ToRole="OrderItem" />
-        </EntityType>
+          </EntityType>
         <Association Name="FK_OrderAssignDetails_OrderInfo">
           <End Type="BakeryCoModel.OrderInfo" Role="OrderInfo" Multiplicity="0..1" />
           <End Type="BakeryCoModel.OrderAssignDetail" Role="OrderAssignDetail" Multiplicity="*" />
@@ -2032,30 +2058,6 @@
             </Principal>
             <Dependent Role="OrderInfo">
               <PropertyRef Name="AddressID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrderItem_OrderInfo">
-          <End Type="BakeryCoModel.OrderInfo" Role="OrderInfo" Multiplicity="1" />
-          <End Type="BakeryCoModel.OrderItem" Role="OrderItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OrderInfo">
-              <PropertyRef Name="OrderId" />
-            </Principal>
-            <Dependent Role="OrderItem">
-              <PropertyRef Name="OrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrderSubItem_OrderInfo">
-          <End Type="BakeryCoModel.OrderInfo" Role="OrderInfo" Multiplicity="1" />
-          <End Type="BakeryCoModel.OrderItem" Role="OrderItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OrderInfo">
-              <PropertyRef Name="OrderId" />
-            </Principal>
-            <Dependent Role="OrderItem">
-              <PropertyRef Name="OrderId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2250,6 +2252,96 @@
           <Property Name="AWSARN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="SubscriptionARN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ItemPrice" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Size" Type="Int32" />
+          <Property Name="ItemType" Type="Int32" />
+          <Property Name="PriceId" Type="Int32" />
+          <Property Name="SpecialCake" Type="Boolean" />
+          <NavigationProperty Name="OrderInfo" Relationship="BakeryCoModel.FK_OrderItem_OrderInfo" FromRole="OrderItem" ToRole="OrderInfo" />
+          <NavigationProperty Name="OrderInfo1" Relationship="BakeryCoModel.FK_OrderSubItem_OrderInfo" FromRole="OrderItem" ToRole="OrderInfo" />
+          <NavigationProperty Name="OrderSubItems" Relationship="BakeryCoModel.FK_OrderSubItem_OrderItem" FromRole="OrderItem" ToRole="OrderSubItem" />
+        </EntityType>
+        <EntityType Name="OrderItemCake">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderItemId" Type="Int32" />
+          <Property Name="OrderId" Type="Int64" />
+          <Property Name="MessageOnCake" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RefImage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ImsgrOnCake" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Shape" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Layers" Type="Int32" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+        </EntityType>
+        <EntityType Name="OrderItemCakeLayer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderItemCakeId" Type="Int32" />
+          <Property Name="OrderItemId" Type="Int32" />
+          <Property Name="OrderId" Type="Int32" />
+          <Property Name="LayerNo" Type="Int32" />
+          <Property Name="FlavorId" Type="Int32" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_OrderItem_OrderInfo">
+          <End Type="BakeryCoModel.OrderInfo" Role="OrderInfo" Multiplicity="1" />
+          <End Type="BakeryCoModel.OrderItem" Role="OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderInfo">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderSubItem_OrderInfo">
+          <End Type="BakeryCoModel.OrderInfo" Role="OrderInfo" Multiplicity="1" />
+          <End Type="BakeryCoModel.OrderItem" Role="OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderInfo">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderSubItem_OrderItem">
+          <End Type="BakeryCoModel.OrderItem" Role="OrderItem" Multiplicity="1" />
+          <End Type="BakeryCoModel.OrderSubItem" Role="OrderSubItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderSubItem">
+              <PropertyRef Name="OrderItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2296,6 +2388,7 @@
           <EntitySetMapping Name="MainCategories">
             <EntityTypeMapping TypeName="BakeryCoModel.MainCategory">
               <MappingFragment StoreEntitySet="MainCategory">
+                <ScalarProperty Name="SequenceId" ColumnName="SequenceId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="ModifiicationDate" ColumnName="ModifiicationDate" />
@@ -2701,23 +2794,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OrderItems">
-            <EntityTypeMapping TypeName="BakeryCoModel.OrderItem">
-              <MappingFragment StoreEntitySet="OrderItem">
-                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
-                <ScalarProperty Name="Size" ColumnName="Size" />
-                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="Qty" ColumnName="Qty" />
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ItemPriceDetails">
             <EntityTypeMapping TypeName="BakeryCoModel.ItemPriceDetail">
               <MappingFragment StoreEntitySet="ItemPriceDetails">
+                <ScalarProperty Name="LayerImage" ColumnName="LayerImage" />
+                <ScalarProperty Name="Layer" ColumnName="Layer" />
                 <ScalarProperty Name="CaloriesUOM" ColumnName="CaloriesUOM" />
                 <ScalarProperty Name="Calories" ColumnName="Calories" />
                 <ScalarProperty Name="CustomCakeJson" ColumnName="CustomCakeJson" />
@@ -2922,6 +3003,9 @@
           <EntitySetMapping Name="ItemsDetails">
             <EntityTypeMapping TypeName="BakeryCoModel.ItemsDetail">
               <MappingFragment StoreEntitySet="ItemsDetails">
+                <ScalarProperty Name="AllowImagesOnCake" ColumnName="AllowImagesOnCake" />
+                <ScalarProperty Name="ReferanceImageOfCake" ColumnName="ReferanceImageOfCake" />
+                <ScalarProperty Name="LayersShape" ColumnName="LayersShape" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
@@ -3201,6 +3285,60 @@
                 <ScalarProperty Name="SourceId" ColumnName="SourceId" />
                 <ScalarProperty Name="Source" ColumnName="Source" />
                 <ScalarProperty Name="DeviceToken" ColumnName="DeviceToken" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderItems">
+            <EntityTypeMapping TypeName="BakeryCoModel.OrderItem">
+              <MappingFragment StoreEntitySet="OrderItem">
+                <ScalarProperty Name="SpecialCake" ColumnName="SpecialCake" />
+                <ScalarProperty Name="PriceId" ColumnName="PriceId" />
+                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderItemCakes">
+            <EntityTypeMapping TypeName="BakeryCoModel.OrderItemCake">
+              <MappingFragment StoreEntitySet="OrderItemCake">
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Layers" ColumnName="Layers" />
+                <ScalarProperty Name="Shape" ColumnName="Shape" />
+                <ScalarProperty Name="ImsgrOnCake" ColumnName="ImsgrOnCake" />
+                <ScalarProperty Name="RefImage" ColumnName="RefImage" />
+                <ScalarProperty Name="MessageOnCake" ColumnName="MessageOnCake" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="OrderItemId" ColumnName="OrderItemId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderItemCakeLayers">
+            <EntityTypeMapping TypeName="BakeryCoModel.OrderItemCakeLayer">
+              <MappingFragment StoreEntitySet="OrderItemCakeLayers">
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="FlavorId" ColumnName="FlavorId" />
+                <ScalarProperty Name="LayerNo" ColumnName="LayerNo" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="OrderItemId" ColumnName="OrderItemId" />
+                <ScalarProperty Name="OrderItemCakeId" ColumnName="OrderItemCakeId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

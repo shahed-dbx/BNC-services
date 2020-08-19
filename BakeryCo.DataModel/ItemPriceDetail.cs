@@ -28,6 +28,8 @@ namespace BakeryCo.DataModel
         public string CustomCakeJson { get; set; }
         public Nullable<decimal> Calories { get; set; }
         public string CaloriesUOM { get; set; }
+        public Nullable<int> Layer { get; set; }
+        public string LayerImage { get; set; }
     
         public virtual ItemSize ItemSize1 { get; set; }
         public virtual ItemsDetail ItemsDetail { get; set; }

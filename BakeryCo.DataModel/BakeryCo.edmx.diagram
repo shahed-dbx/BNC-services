@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="eae3b14cfa5d46ac8b1afeec4b23bca4" Name="Diagram1" ZoomLevel="72">
+      <Diagram DiagramId="eae3b14cfa5d46ac8b1afeec4b23bca4" Name="Diagram1" ZoomLevel="108">
         <EntityTypeShape EntityType="BakeryCoModel.Registration" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BakeryCoModel.MainCategory" Width="1.5" PointX="3.75" PointY="5.375" />
         <EntityTypeShape EntityType="BakeryCoModel.OrderTracking" Width="1.5" PointX="9.75" PointY="11.25" />
@@ -24,8 +24,6 @@
         <EntityTypeShape EntityType="BakeryCoModel.Section" Width="1.5" PointX="14.375" PointY="15.75" />
         <EntityTypeShape EntityType="BakeryCoModel.SubItemDetail" Width="1.5" PointX="10.5" PointY="23.125" />
         <EntityTypeShape EntityType="BakeryCoModel.StoreWorkData" Width="1.5" PointX="3" PointY="12.125" />
-        <EntityTypeShape EntityType="BakeryCoModel.OrderItem" Width="1.5" PointX="7.625" PointY="24.75" />
-        <AssociationConnector Association="BakeryCoModel.FK_OrderSubItem_OrderItem" />
         <EntityTypeShape EntityType="BakeryCoModel.ItemPriceDetail" Width="1.5" PointX="10.5" PointY="6.375" />
         <EntityTypeShape EntityType="BakeryCoModel.userPromotion" Width="1.5" PointX="11.375" PointY="0.75" />
         <EntityTypeShape EntityType="BakeryCoModel.VATDetail" Width="1.5" PointX="5.375" PointY="10.75" />
@@ -49,9 +47,13 @@
         <AssociationConnector Association="BakeryCoModel.FK_OrderAssignDetails_OrderInfo" />
         <AssociationConnector Association="BakeryCoModel.FK_OrderInfo_Registration" />
         <AssociationConnector Association="BakeryCoModel.FK_OrderInfo_UserAddress" />
+        <EntityTypeShape EntityType="BakeryCoModel.UserDeviceToken" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BakeryCoModel.OrderItem" Width="1.5" PointX="20.875" PointY="5" />
+        <EntityTypeShape EntityType="BakeryCoModel.OrderItemCake" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BakeryCoModel.OrderItemCakeLayer" Width="1.5" PointX="6.375" PointY="5.75" />
         <AssociationConnector Association="BakeryCoModel.FK_OrderItem_OrderInfo" />
         <AssociationConnector Association="BakeryCoModel.FK_OrderSubItem_OrderInfo" />
-        <EntityTypeShape EntityType="BakeryCoModel.UserDeviceToken" Width="1.5" PointX="3.375" PointY="0.75" />
+        <AssociationConnector Association="BakeryCoModel.FK_OrderSubItem_OrderItem" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

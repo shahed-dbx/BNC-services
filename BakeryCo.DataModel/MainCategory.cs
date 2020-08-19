@@ -30,6 +30,7 @@ namespace BakeryCo.DataModel
         public Nullable<System.DateTime> ModifiicationDate { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
         public Nullable<bool> Status { get; set; }
+        public Nullable<int> SequenceId { get; set; }
     
         public virtual ICollection<SubCategory> SubCategories { get; set; }
     }
