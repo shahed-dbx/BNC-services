@@ -453,7 +453,7 @@ namespace BakeryCo.Repositary
 				}
 				return Jobj;
 			}
-			catch
+			catch (Exception EX)
 			{
 				return Jobj;
 			}

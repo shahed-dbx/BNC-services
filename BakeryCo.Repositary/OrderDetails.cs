@@ -44,7 +44,8 @@ namespace BakeryCo.Repositary
 					int _itemId = 0;
 					int? _userid = 0;
 					string InvoiceNo = string.Empty;
-					// 
+					int _OrderItemCakeId = 0;
+
 					foreach (JToken mItem in MainItem)
 					{
 						OrderInfo ord = JsonConvert.DeserializeObject<OrderInfo>(mItem.ToString());
@@ -172,25 +173,12 @@ namespace BakeryCo.Repositary
 
 					foreach (JToken sItem in SubItem)
 					{
-						// bool additional = false;
 						JToken Jitems = null;
-						// JToken Jadditionals = null;
-						//foreach (JToken subItems in sItem)
-						//{
-						//    if (!additional)
-						//    {
-						//Jitems = subItems;
 						Jitems = sItem;
-						//additional = true;
-						//}
-						//else
-						//{
-						//    Jadditionals = subItems;
-						//}
-						//}
+
 						if (null != Jitems)
 						{
-							//var itemProperties = Jitems.Children<JProperty>().ToList();
+							//~~~~~~~~~~~Sub Items Reading.~~~~~~~~~~~~~~~~~~~
 							IEnumerable<JToken> SubsubItem = Jitems.SelectToken("SubSubItems");
 							OrderItem OrItem = JsonConvert.DeserializeObject<OrderItem>(Jitems.ToString());
 							OrItem.OrderId = _orderId;
@@ -208,9 +196,45 @@ namespace BakeryCo.Repositary
 									db.SaveChanges();
 								}
 							}
+							//End Sub Item Reading.....
+							//~~~~~Special cake Data Reading.~~~~~~~~~~~~~~~~~~~~~~
+							IEnumerable<JToken> SpclCake = Jitems.SelectToken("SpecialCakeObj");
+							if (SpclCake != null)
+							{
+								foreach (JToken SpCake in SpclCake)
+								{
+									JToken SpJTokens = null;
+									SpJTokens = SpCake;
 
+									IEnumerable<JToken> Flavors = SpJTokens.SelectToken("flavorDetails");
+
+									OrderItemCake OrdItmCake = JsonConvert.DeserializeObject<OrderItemCake>(SpJTokens.ToString());
+									OrdItmCake.OrderItemId = _itemId;
+									OrdItmCake.OrderId = _orderId;
+									OrdItmCake.Status = true;
+									OrdItmCake.CreatedOn = Common.KSA_DateTime();
+									db.Entry(OrdItmCake).State = System.Data.Entity.EntityState.Added;
+									db.SaveChanges();
+									_OrderItemCakeId = OrdItmCake.Id;
+
+									// Special cake Layers data reading..
+									if (Flavors != null)
+									{
+										foreach (JToken Flvr in Flavors)
+										{
+											OrderItemCakeLayer OrdItmCakeLyr = JsonConvert.DeserializeObject<OrderItemCakeLayer>(Flvr.ToString());
+											OrdItmCakeLyr.OrderItemCakeId = _OrderItemCakeId;
+											OrdItmCakeLyr.OrderItemId = _itemId;
+											OrdItmCakeLyr.OrderId = _orderId;
+											OrdItmCakeLyr.Status = true;
+											OrdItmCakeLyr.CreatedOn = Common.KSA_DateTime();
+											db.Entry(OrdItmCakeLyr).State = System.Data.Entity.EntityState.Added;
+											db.SaveChanges();
+										}
+									}
+								}
+							}
 						}
-
 					}
 					// db.SaveChanges();
 					objTran.Complete();
@@ -224,7 +248,6 @@ namespace BakeryCo.Repositary
 				Jobj = new JObject(new JProperty("Failure", ex.Message));
 				return Jobj;
 			}
-
 		}
 
 		public JObject InsertOrderDetails(JObject Json)
@@ -435,7 +458,6 @@ namespace BakeryCo.Repositary
 
 		}
 
-
 		public JObject TrackOrder_New(int orderid, int userid)
 		{
 			JObject Jobj = new JObject(new JProperty("Failure", "No Order Found"));
@@ -623,18 +645,46 @@ namespace BakeryCo.Repositary
 													fOrder.ItemName,
 													fOrder.ItemName_Ar,
 													fOrder.ItemPrice,
+													fOrder.ActualPrice,
 													fOrder.Qty,
 													fOrder.ItemId,
 													fOrder.OrderId,
 													fOrder.oItemId,
 													fOrder.SizeName,
-
-													fOrder.ItemType
+													fOrder.ItemType,
+													fOrder.OrderItemId
 												}).Distinct().ToList();
 
 							var subItems = (from SubItm in OdrInfo select new { SubItm.OrderId, SubItm.oItemId, SubItm.SubItem, SubItm.SubItemAr, SubItm.ItemName_Ar, SubItm.subItemPrice, SubItm.subItemQty }).Distinct().ToList();
 
 							var rating = (from rat in db.Ratings where rat.OrderType == ordetails.OrderType && rat.IsActive == true select new { Rating = rat.Rating1 }).Distinct().OrderByDescending(x => x.Rating).ToList();
+
+							var specialCake = (from SpOrder in OdrInfo
+											   where itemid.Contains(SpOrder.Id)
+											   select new
+											   {
+												   SpOrder.OrderItemCake_ID,
+												   SpOrder.OrderItemId,
+												   SpOrder.OrderId,
+												   SpOrder.MessageOnCake,
+												   SpOrder.RefImage,
+												   SpOrder.ImsgrOnCake,
+												   SpOrder.Shape,
+												   SpOrder.Layers
+											   }).Distinct().ToList();
+
+							var specialCakeLyr = (from SpLyrOrder in OdrInfo
+												  where itemid.Contains(SpLyrOrder.Id)
+												  select new
+												  {
+													  SpLyrOrder.OrderId,
+													  SpLyrOrder.OrderItemId,
+													  SpLyrOrder.OrderItemCakeId,
+													  SpLyrOrder.FlavorId,
+													  SpLyrOrder.FlavorName,
+													  SpLyrOrder.FlavorImage,
+													  SpLyrOrder.LayerNo
+												  }).Distinct().ToList();
 
 							JObject Jobjrating = new JObject();
 
@@ -726,13 +776,35 @@ namespace BakeryCo.Repositary
 																						 new JProperty("ItemType", fOrder.ItemType == 1 ? "Whole" : fOrder.ItemType == 2 ? "Slices" : "Whole"),
 																						new JProperty("SizeName", fOrder.SizeName),
 																						new JProperty("price", fOrder.ItemPrice),
+																						new JProperty("ActualPrice", fOrder.ActualPrice),
 																							new JProperty("oAdd", from sbt in subItems
 																												  where sbt.oItemId == fOrder.oItemId && fOrder.OrderId == ordetails.OrderId
 																												  select new JObject(
 																														 new JProperty("SubItem", sbt.SubItem),
 																													  new JProperty("SubItemQty", sbt.subItemQty))
 
-																						 ))))));//));
+																						 ),
+																						 new JProperty("SpecialCake", from SPOrder in specialCake
+																													  where SPOrder.OrderItemId == fOrder.OrderItemId && fOrder.OrderId == ordetails.OrderId
+																													  select new JObject(
+																														  new JProperty("MessageOnCake", SPOrder.MessageOnCake),
+																														  new JProperty("RefImage", SPOrder.RefImage),
+																														  new JProperty("ImgOnCake", SPOrder.ImsgrOnCake),
+																														   new JProperty("Shape", SPOrder.Shape),
+																														  new JProperty("Layers", SPOrder.Layers),
+																															  new JProperty("LayerDetails", from SpCakeLr in specialCakeLyr
+																																							where SpCakeLr.OrderItemCakeId == SPOrder.OrderItemCake_ID && SpCakeLr.OrderItemId == fOrder.OrderItemId
+																																							select new JObject(
+																																							new JProperty("FlavorId", SpCakeLr.FlavorId),
+																																							new JProperty("FlavorName", SpCakeLr.FlavorName),
+																																							new JProperty("FlavorImage", SpCakeLr.FlavorImage),
+																																							new JProperty("LayerNo", SpCakeLr.LayerNo))
+
+																																																   )))
+
+																						 ))
+
+																						 )));//));
 							lstProp.Add(JordDet);
 							break;
 						}

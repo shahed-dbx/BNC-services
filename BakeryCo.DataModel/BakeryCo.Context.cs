@@ -56,9 +56,9 @@ namespace BakeryCo.DataModel
         public virtual DbSet<UserAddressDetail> UserAddressDetails { get; set; }
         public virtual DbSet<OrderInfo> OrderInfoes { get; set; }
         public virtual DbSet<UserDeviceToken> UserDeviceTokens { get; set; }
-        public virtual DbSet<OrderItem> OrderItems { get; set; }
         public virtual DbSet<OrderItemCake> OrderItemCakes { get; set; }
         public virtual DbSet<OrderItemCakeLayer> OrderItemCakeLayers { get; set; }
+        public virtual DbSet<OrderItem> OrderItems { get; set; }
     
         public virtual ObjectResult<string> SP_CancelOrder(Nullable<int> orderId, Nullable<int> userId)
         {
@@ -221,19 +221,6 @@ namespace BakeryCo.DataModel
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<procSelectSpecifiedDayStoreTime_Result>("procSelectSpecifiedDayStoreTime", dayOfWeekParameter, userVersionParameter, appTypeParameter);
         }
     
-        public virtual ObjectResult<SP_Get_OrderTracking_Result> SP_Get_OrderTracking(Nullable<int> userId, Nullable<int> orderId)
-        {
-            var userIdParameter = userId.HasValue ?
-                new ObjectParameter("UserId", userId) :
-                new ObjectParameter("UserId", typeof(int));
-    
-            var orderIdParameter = orderId.HasValue ?
-                new ObjectParameter("OrderId", orderId) :
-                new ObjectParameter("OrderId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Get_OrderTracking_Result>("SP_Get_OrderTracking", userIdParameter, orderIdParameter);
-        }
-    
         public virtual ObjectResult<SP_Get_OrderTracking_New_Result> SP_Get_OrderTracking_New(Nullable<int> userId, Nullable<int> orderId)
         {
             var userIdParameter = userId.HasValue ?
@@ -254,6 +241,19 @@ namespace BakeryCo.DataModel
                 new ObjectParameter("DriverId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Get_AssignOrderDetails_Result>("SP_Get_AssignOrderDetails", driverIdParameter);
+        }
+    
+        public virtual ObjectResult<SP_Get_OrderTracking_Result> SP_Get_OrderTracking(Nullable<int> userId, Nullable<int> orderId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(int));
+    
+            var orderIdParameter = orderId.HasValue ?
+                new ObjectParameter("OrderId", orderId) :
+                new ObjectParameter("OrderId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Get_OrderTracking_Result>("SP_Get_OrderTracking", userIdParameter, orderIdParameter);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace BakeryCo.DataModel
         public decimal VatCharges { get; set; }
         public decimal VatPercentage { get; set; }
         public decimal SubTotal { get; set; }
-        public Nullable<decimal> discountAmount { get; set; }
+        public decimal discountAmount { get; set; }
         public Nullable<decimal> NetTotal { get; set; }
         public string Comments { get; set; }
         public string InvoiceNo { get; set; }
@@ -36,6 +36,7 @@ namespace BakeryCo.DataModel
         public string ItemName { get; set; }
         public string ItemName_Ar { get; set; }
         public string ItemPrice { get; set; }
+        public Nullable<decimal> ActualPrice { get; set; }
         public int Qty { get; set; }
         public Nullable<int> ItemType { get; set; }
         public string SizeName { get; set; }
@@ -59,5 +60,17 @@ namespace BakeryCo.DataModel
         public decimal PromoAmt { get; set; }
         public int Ratings { get; set; }
         public decimal OrderRat { get; set; }
+        public int OrderItemCake_ID { get; set; }
+        public int OrderItemId { get; set; }
+        public string MessageOnCake { get; set; }
+        public string RefImage { get; set; }
+        public string ImsgrOnCake { get; set; }
+        public string Shape { get; set; }
+        public int Layers { get; set; }
+        public int LayerNo { get; set; }
+        public int FlavorId { get; set; }
+        public int OrderItemCakeId { get; set; }
+        public string FlavorName { get; set; }
+        public string FlavorImage { get; set; }
     }
 }

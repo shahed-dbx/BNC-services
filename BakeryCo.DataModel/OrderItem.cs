@@ -25,6 +25,7 @@ namespace BakeryCo.DataModel
         public int Qty { get; set; }
         public string Comments { get; set; }
         public string ItemPrice { get; set; }
+        public Nullable<decimal> ActualPrice { get; set; }
         public Nullable<int> Size { get; set; }
         public Nullable<int> ItemType { get; set; }
         public Nullable<int> PriceId { get; set; }

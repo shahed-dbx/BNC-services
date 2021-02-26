@@ -68,5 +68,21 @@ namespace BakeryCo.Controllers
 				return Request.CreateResponse(HttpStatusCode.BadRequest);
 			}
 		}
+
+		//Shahed created service for promotion list in website.
+
+		[HttpGet]
+		public HttpResponseMessage GetPromotionsList()
+		{
+			try
+			{
+				var response = Request.CreateResponse(HttpStatusCode.Created, obj.GetPromotionsList());
+				return response;
+			}
+			catch (Exception ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.BadRequest);
+			}
+		}
 	}
 }

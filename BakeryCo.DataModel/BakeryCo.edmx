@@ -207,6 +207,7 @@
           <Property Name="Qty" Type="int" Nullable="false" />
           <Property Name="Comments" Type="nvarchar(max)" />
           <Property Name="ItemPrice" Type="nvarchar" MaxLength="50" />
+          <Property Name="ActualPrice" Type="decimal" Precision="8" Scale="2" />
           <Property Name="Size" Type="int" />
           <Property Name="ItemType" Type="int" />
           <Property Name="PriceId" Type="int" />
@@ -1149,10 +1150,6 @@
             <Parameter Name="UserVersion" Mode="In" Type="String" />
             <Parameter Name="AppType" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="SP_Get_OrderTracking" ReturnType="Collection(BakeryCoModel.SP_Get_OrderTracking_Result)">
-            <Parameter Name="UserId" Mode="In" Type="Int32" />
-            <Parameter Name="OrderId" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="SP_Get_OrderTracking_New" ReturnType="Collection(BakeryCoModel.SP_Get_OrderTracking_New_Result)">
             <Parameter Name="UserId" Mode="In" Type="Int32" />
             <Parameter Name="OrderId" Mode="In" Type="Int32" />
@@ -1161,9 +1158,9 @@
           <Parameter Name="DriverId" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="UserDeviceTokens" EntityType="BakeryCoModel.UserDeviceToken" />
-          <EntitySet Name="OrderItems" EntityType="BakeryCoModel.OrderItem" />
           <EntitySet Name="OrderItemCakes" EntityType="BakeryCoModel.OrderItemCake" />
           <EntitySet Name="OrderItemCakeLayers" EntityType="BakeryCoModel.OrderItemCakeLayer" />
+          <EntitySet Name="OrderItems" EntityType="BakeryCoModel.OrderItem" />
           <AssociationSet Name="FK_OrderItem_OrderInfo" Association="BakeryCoModel.FK_OrderItem_OrderInfo">
             <End Role="OrderInfo" EntitySet="OrderInfoes" />
             <End Role="OrderItem" EntitySet="OrderItems" />
@@ -1176,6 +1173,10 @@
             <End Role="OrderItem" EntitySet="OrderItems" />
             <End Role="OrderSubItem" EntitySet="OrderSubItems" />
           </AssociationSet>
+          <FunctionImport Name="SP_Get_OrderTracking" ReturnType="Collection(BakeryCoModel.SP_Get_OrderTracking_Result)">
+            <Parameter Name="UserId" Mode="In" Type="Int32" />
+            <Parameter Name="OrderId" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="MainCategory">
           <Key>
@@ -2110,54 +2111,6 @@
           <Property Type="Decimal" Name="VatPercentage" Nullable="false" Precision="18" Scale="2" />
           <Property Type="String" Name="AppVersion" Nullable="false" />
         </ComplexType>
-        <ComplexType Name="SP_Get_OrderTracking_Result">
-          <Property Type="Int32" Name="UserId" Nullable="true" />
-          <Property Type="Int32" Name="OrderId" Nullable="false" />
-          <Property Type="DateTime" Name="OrderDate" Nullable="true" Precision="23" />
-          <Property Type="String" Name="OrderType" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="ExpectedTime" Nullable="true" MaxLength="20" />
-          <Property Type="Decimal" Name="Total_Price" Nullable="true" Precision="10" Scale="2" />
-          <Property Type="Decimal" Name="DeliveryCharges" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="Decimal" Name="VatCharges" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="Decimal" Name="VatPercentage" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="Decimal" Name="SubTotal" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="Decimal" Name="discountAmount" Nullable="true" Precision="10" Scale="2" />
-          <Property Type="Decimal" Name="NetTotal" Nullable="true" Precision="10" Scale="2" />
-          <Property Type="String" Name="Comments" Nullable="true" />
-          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="20" />
-          <Property Type="Int32" Name="StoreId" Nullable="true" />
-          <Property Type="Boolean" Name="IsFavorite" Nullable="true" />
-          <Property Type="String" Name="FavoriteName" Nullable="true" MaxLength="200" />
-          <Property Type="Int32" Name="PaymentMode" Nullable="true" />
-          <Property Type="String" Name="Address" Nullable="false" MaxLength="300" />
-          <Property Type="Int32" Name="ItemId" Nullable="true" />
-          <Property Type="String" Name="ItemName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="ItemName_Ar" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="ItemPrice" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="Qty" Nullable="false" />
-          <Property Type="Int32" Name="ItemType" Nullable="true" />
-          <Property Type="String" Name="SizeName" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="orderitem_orderid" Nullable="true" />
-          <Property Type="Int32" Name="oItemId" Nullable="true" />
-          <Property Type="String" Name="SubItem" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="SubItemAr" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="subItemQty" Nullable="false" />
-          <Property Type="String" Name="subItemPrice" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="StoreAddress" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="StoreAddress_ar" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="StoreName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="StoreName_ar" Nullable="true" MaxLength="50" />
-          <Property Type="Double" Name="Latitude" Nullable="true" />
-          <Property Type="Double" Name="Longitude" Nullable="true" />
-          <Property Type="DateTime" Name="TrackingTime" Nullable="true" Precision="23" />
-          <Property Type="String" Name="OrderStatus" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="Id" Nullable="true" />
-          <Property Type="String" Name="phone" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="AcceptedBy" Nullable="true" />
-          <Property Type="Decimal" Name="PromoAmt" Nullable="false" Precision="18" Scale="2" />
-          <Property Type="Int32" Name="Ratings" Nullable="false" />
-          <Property Type="Decimal" Name="OrderRat" Nullable="false" Precision="8" Scale="2" />
-        </ComplexType>
         <ComplexType Name="SP_Get_OrderTracking_New_Result">
           <Property Type="Int32" Name="UserId" Nullable="true" />
           <Property Type="Int32" Name="OrderId" Nullable="false" />
@@ -2252,24 +2205,6 @@
           <Property Name="AWSARN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="SubscriptionARN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="OrderItem">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderId" Type="Int32" Nullable="false" />
-          <Property Name="ItemId" Type="Int32" Nullable="false" />
-          <Property Name="Qty" Type="Int32" Nullable="false" />
-          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ItemPrice" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Size" Type="Int32" />
-          <Property Name="ItemType" Type="Int32" />
-          <Property Name="PriceId" Type="Int32" />
-          <Property Name="SpecialCake" Type="Boolean" />
-          <NavigationProperty Name="OrderInfo" Relationship="BakeryCoModel.FK_OrderItem_OrderInfo" FromRole="OrderItem" ToRole="OrderInfo" />
-          <NavigationProperty Name="OrderInfo1" Relationship="BakeryCoModel.FK_OrderSubItem_OrderInfo" FromRole="OrderItem" ToRole="OrderInfo" />
-          <NavigationProperty Name="OrderSubItems" Relationship="BakeryCoModel.FK_OrderSubItem_OrderItem" FromRole="OrderItem" ToRole="OrderSubItem" />
-        </EntityType>
         <EntityType Name="OrderItemCake">
           <Key>
             <PropertyRef Name="Id" />
@@ -2305,6 +2240,25 @@
           <Property Name="IsDeleted" Type="Boolean" />
           <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
           <Property Name="ModifiedBy" Type="Int32" />
+        </EntityType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ItemPrice" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ActualPrice" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="Size" Type="Int32" />
+          <Property Name="ItemType" Type="Int32" />
+          <Property Name="PriceId" Type="Int32" />
+          <Property Name="SpecialCake" Type="Boolean" />
+          <NavigationProperty Name="OrderInfo" Relationship="BakeryCoModel.FK_OrderItem_OrderInfo" FromRole="OrderItem" ToRole="OrderInfo" />
+          <NavigationProperty Name="OrderInfo1" Relationship="BakeryCoModel.FK_OrderSubItem_OrderInfo" FromRole="OrderItem" ToRole="OrderInfo" />
+          <NavigationProperty Name="OrderSubItems" Relationship="BakeryCoModel.FK_OrderSubItem_OrderItem" FromRole="OrderItem" ToRole="OrderSubItem" />
         </EntityType>
         <Association Name="FK_OrderItem_OrderInfo">
           <End Type="BakeryCoModel.OrderInfo" Role="OrderInfo" Multiplicity="1" />
@@ -2342,6 +2296,67 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="SP_Get_OrderTracking_Result">
+          <Property Type="Int32" Name="UserId" Nullable="true" />
+          <Property Type="Int32" Name="OrderId" Nullable="false" />
+          <Property Type="DateTime" Name="OrderDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="OrderType" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="ExpectedTime" Nullable="true" MaxLength="20" />
+          <Property Type="Decimal" Name="Total_Price" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="DeliveryCharges" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="VatCharges" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="VatPercentage" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="SubTotal" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="discountAmount" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="NetTotal" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="String" Name="Comments" Nullable="true" />
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="StoreId" Nullable="true" />
+          <Property Type="Boolean" Name="IsFavorite" Nullable="true" />
+          <Property Type="String" Name="FavoriteName" Nullable="true" MaxLength="200" />
+          <Property Type="Int32" Name="PaymentMode" Nullable="true" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="300" />
+          <Property Type="Int32" Name="ItemId" Nullable="true" />
+          <Property Type="String" Name="ItemName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ItemName_Ar" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ItemPrice" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="ActualPrice" Nullable="true" Precision="8" Scale="2" />
+          <Property Type="Int32" Name="Qty" Nullable="false" />
+          <Property Type="Int32" Name="ItemType" Nullable="true" />
+          <Property Type="String" Name="SizeName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="orderitem_orderid" Nullable="true" />
+          <Property Type="Int32" Name="oItemId" Nullable="true" />
+          <Property Type="String" Name="SubItem" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SubItemAr" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="subItemQty" Nullable="false" />
+          <Property Type="String" Name="subItemPrice" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="StoreAddress" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="StoreAddress_ar" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="StoreName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="StoreName_ar" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="Latitude" Nullable="true" />
+          <Property Type="Double" Name="Longitude" Nullable="true" />
+          <Property Type="DateTime" Name="TrackingTime" Nullable="true" Precision="23" />
+          <Property Type="String" Name="OrderStatus" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Id" Nullable="true" />
+          <Property Type="String" Name="phone" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="AcceptedBy" Nullable="true" />
+          <Property Type="Decimal" Name="PromoAmt" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="Ratings" Nullable="false" />
+          <Property Type="Decimal" Name="OrderRat" Nullable="false" Precision="8" Scale="2" />
+          <Property Type="Int32" Name="OrderItemCake_ID" Nullable="false" />
+          <Property Type="Int32" Name="OrderItemId" Nullable="false" />
+          <Property Type="String" Name="MessageOnCake" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="RefImage" Nullable="false" MaxLength="500" />
+          <Property Type="String" Name="ImsgrOnCake" Nullable="false" MaxLength="500" />
+          <Property Type="String" Name="Shape" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="Layers" Nullable="false" />
+          <Property Type="Int32" Name="LayerNo" Nullable="false" />
+          <Property Type="Int32" Name="FlavorId" Nullable="false" />
+          <Property Type="Int32" Name="OrderItemCakeId" Nullable="false" />
+          <Property Type="String" Name="FlavorName" Nullable="false" />
+          <Property Type="String" Name="FlavorImage" Nullable="false" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3186,58 +3201,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Get_OrderTracking" FunctionName="BakeryCoModel.Store.SP_Get_OrderTracking">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BakeryCoModel.SP_Get_OrderTracking_Result">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="OrderType" ColumnName="OrderType" />
-                <ScalarProperty Name="ExpectedTime" ColumnName="ExpectedTime" />
-                <ScalarProperty Name="Total_Price" ColumnName="Total_Price" />
-                <ScalarProperty Name="DeliveryCharges" ColumnName="DeliveryCharges" />
-                <ScalarProperty Name="VatCharges" ColumnName="VatCharges" />
-                <ScalarProperty Name="VatPercentage" ColumnName="VatPercentage" />
-                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
-                <ScalarProperty Name="discountAmount" ColumnName="discountAmount" />
-                <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
-                <ScalarProperty Name="StoreId" ColumnName="StoreId" />
-                <ScalarProperty Name="IsFavorite" ColumnName="IsFavorite" />
-                <ScalarProperty Name="FavoriteName" ColumnName="FavoriteName" />
-                <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
-                <ScalarProperty Name="ItemName_Ar" ColumnName="ItemName_Ar" />
-                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
-                <ScalarProperty Name="Qty" ColumnName="Qty" />
-                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
-                <ScalarProperty Name="SizeName" ColumnName="SizeName" />
-                <ScalarProperty Name="orderitem_orderid" ColumnName="orderitem_orderid" />
-                <ScalarProperty Name="oItemId" ColumnName="oItemId" />
-                <ScalarProperty Name="SubItem" ColumnName="SubItem" />
-                <ScalarProperty Name="SubItemAr" ColumnName="SubItemAr" />
-                <ScalarProperty Name="subItemQty" ColumnName="subItemQty" />
-                <ScalarProperty Name="subItemPrice" ColumnName="subItemPrice" />
-                <ScalarProperty Name="StoreAddress" ColumnName="StoreAddress" />
-                <ScalarProperty Name="StoreAddress_ar" ColumnName="StoreAddress_ar" />
-                <ScalarProperty Name="StoreName" ColumnName="StoreName" />
-                <ScalarProperty Name="StoreName_ar" ColumnName="StoreName_ar" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="TrackingTime" ColumnName="TrackingTime" />
-                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="phone" ColumnName="phone" />
-                <ScalarProperty Name="AcceptedBy" ColumnName="AcceptedBy" />
-                <ScalarProperty Name="PromoAmt" ColumnName="PromoAmt" />
-                <ScalarProperty Name="Ratings" ColumnName="Ratings" />
-                <ScalarProperty Name="OrderRat" ColumnName="OrderRat" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_Get_AssignOrderDetails" FunctionName="BakeryCoModel.Store.SP_Get_AssignOrderDetails">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BakeryCoModel.SP_Get_AssignOrderDetails_Result">
@@ -3289,22 +3252,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OrderItems">
-            <EntityTypeMapping TypeName="BakeryCoModel.OrderItem">
-              <MappingFragment StoreEntitySet="OrderItem">
-                <ScalarProperty Name="SpecialCake" ColumnName="SpecialCake" />
-                <ScalarProperty Name="PriceId" ColumnName="PriceId" />
-                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
-                <ScalarProperty Name="Size" ColumnName="Size" />
-                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="Qty" ColumnName="Qty" />
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="OrderItemCakes">
             <EntityTypeMapping TypeName="BakeryCoModel.OrderItemCake">
               <MappingFragment StoreEntitySet="OrderItemCake">
@@ -3343,6 +3290,88 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OrderItems">
+            <EntityTypeMapping TypeName="BakeryCoModel.OrderItem">
+              <MappingFragment StoreEntitySet="OrderItem">
+                <ScalarProperty Name="SpecialCake" ColumnName="SpecialCake" />
+                <ScalarProperty Name="PriceId" ColumnName="PriceId" />
+                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="ActualPrice" ColumnName="ActualPrice" />
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_Get_OrderTracking" FunctionName="BakeryCoModel.Store.SP_Get_OrderTracking">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BakeryCoModel.SP_Get_OrderTracking_Result">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="OrderType" ColumnName="OrderType" />
+                <ScalarProperty Name="ExpectedTime" ColumnName="ExpectedTime" />
+                <ScalarProperty Name="Total_Price" ColumnName="Total_Price" />
+                <ScalarProperty Name="DeliveryCharges" ColumnName="DeliveryCharges" />
+                <ScalarProperty Name="VatCharges" ColumnName="VatCharges" />
+                <ScalarProperty Name="VatPercentage" ColumnName="VatPercentage" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="discountAmount" ColumnName="discountAmount" />
+                <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="StoreId" ColumnName="StoreId" />
+                <ScalarProperty Name="IsFavorite" ColumnName="IsFavorite" />
+                <ScalarProperty Name="FavoriteName" ColumnName="FavoriteName" />
+                <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ItemName_Ar" ColumnName="ItemName_Ar" />
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="ActualPrice" ColumnName="ActualPrice" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
+                <ScalarProperty Name="SizeName" ColumnName="SizeName" />
+                <ScalarProperty Name="orderitem_orderid" ColumnName="orderitem_orderid" />
+                <ScalarProperty Name="oItemId" ColumnName="oItemId" />
+                <ScalarProperty Name="SubItem" ColumnName="SubItem" />
+                <ScalarProperty Name="SubItemAr" ColumnName="SubItemAr" />
+                <ScalarProperty Name="subItemQty" ColumnName="subItemQty" />
+                <ScalarProperty Name="subItemPrice" ColumnName="subItemPrice" />
+                <ScalarProperty Name="StoreAddress" ColumnName="StoreAddress" />
+                <ScalarProperty Name="StoreAddress_ar" ColumnName="StoreAddress_ar" />
+                <ScalarProperty Name="StoreName" ColumnName="StoreName" />
+                <ScalarProperty Name="StoreName_ar" ColumnName="StoreName_ar" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="TrackingTime" ColumnName="TrackingTime" />
+                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="AcceptedBy" ColumnName="AcceptedBy" />
+                <ScalarProperty Name="PromoAmt" ColumnName="PromoAmt" />
+                <ScalarProperty Name="Ratings" ColumnName="Ratings" />
+                <ScalarProperty Name="OrderRat" ColumnName="OrderRat" />
+                <ScalarProperty Name="OrderItemCake_ID" ColumnName="OrderItemCake_ID" />
+                <ScalarProperty Name="OrderItemId" ColumnName="OrderItemId" />
+                <ScalarProperty Name="MessageOnCake" ColumnName="MessageOnCake" />
+                <ScalarProperty Name="RefImage" ColumnName="RefImage" />
+                <ScalarProperty Name="ImsgrOnCake" ColumnName="ImsgrOnCake" />
+                <ScalarProperty Name="Shape" ColumnName="Shape" />
+                <ScalarProperty Name="Layers" ColumnName="Layers" />
+                <ScalarProperty Name="LayerNo" ColumnName="LayerNo" />
+                <ScalarProperty Name="FlavorId" ColumnName="FlavorId" />
+                <ScalarProperty Name="OrderItemCakeId" ColumnName="OrderItemCakeId" />
+                <ScalarProperty Name="FlavorName" ColumnName="FlavorName" />
+                <ScalarProperty Name="FlavorImage" ColumnName="FlavorImage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
